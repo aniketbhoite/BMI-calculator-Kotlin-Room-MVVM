@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BMI Calc - Kotlin</string>
+    <string name="hint_name_text">Name</string>
+    <string name="weight_hint_text">Weight (in kg)</string>
+    <string name="height_hint_text">Height (in m)</string>
+    <string name="genderLabelText">Gender</string>
+    <string name="list_age_text">Height : %1$s m</string>
+    <string name="list_gender_text">Weight: %1$s kg</string>
+    <string name="update_btn_text">Update</string>
+    <string name="error_toast_msg">Something went wrong</string>
+    <string name="no_bmi_data_available">No BMI data available</string>
+
+    <array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </array>
+</resources>
