@@ -7,7 +7,7 @@ import com.example.aniket.bmicalc_kotlin.room.MyRoom
 /**
  * Created by aniket on 18-09-2017.
  */
-class InsertEditPresenter:IInsertEditPresenter {
+class InsertEditPresenter : IInsertEditPresenter {
 
     private val dao = MyRoom.myDatabase.userBmiDao()
 
@@ -27,25 +27,25 @@ class InsertEditPresenter:IInsertEditPresenter {
         val h: Float = height.toFloat()
         val w: Float = weight.toFloat()
 
-        return (w/(h*h)).toString()
+        return (w / (h * h)).toString()
     }
 
     override fun insertBmiData(userBmi: UserBmi) {
-        val result:Long =dao.insertUserBmiData(userBmi)
-        if (result>0)
+        val result: Long = dao.insertUserBmiData(userBmi)
+        if (result > 0)
             mIInsertEditView!!.dataSubmitted()
         else
             mIInsertEditView!!.dataSubmitFailed()
     }
 
     override fun fetchBmiData(id: Int) {
-        val userBmi:UserBmi = dao.getBmiUserData(id)
+        val userBmi: UserBmi = dao.getBmiUserData(id)
         mIInsertEditView!!.attachBmiDataToUi(userBmi)
     }
 
     override fun updateBmiData(userBmi: UserBmi) {
-        val result:Int = dao.updateUserBmiData(userBmi)
-        if (result>0)
+        val result: Int = dao.updateUserBmiData(userBmi)
+        if (result > 0)
             mIInsertEditView!!.dataSubmitted()
         else
             mIInsertEditView!!.dataSubmitFailed()

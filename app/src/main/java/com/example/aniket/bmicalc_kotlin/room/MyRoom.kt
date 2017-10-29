@@ -5,7 +5,7 @@ import android.app.Application
 /**
  * Created by aniket on 17-09-2017.
  */
-class MyRoom : Application(){
+class MyRoom : Application() {
     companion object {
         lateinit var myDatabase: com.example.aniket.bmicalc_kotlin.data.MyDatabase
     }

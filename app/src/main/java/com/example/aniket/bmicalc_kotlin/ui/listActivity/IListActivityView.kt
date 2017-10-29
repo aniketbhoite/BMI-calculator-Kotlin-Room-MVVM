@@ -8,7 +8,7 @@ import com.example.aniket.bmicalc_kotlin.data.UserBmi
  */
 interface IListActivityView {
 
-    fun getContext():Context
+    fun getContext(): Context
 
-    fun bmiDataFetchedSuccefully(userBmiList:MutableList<UserBmi>)
+    fun bmiDataFetchedSuccefully(userBmiList: MutableList<UserBmi>)
 }

@@ -12,9 +12,9 @@ import com.example.aniket.bmicalc_kotlin.room.MyRoom
 /**
  * Created by aniket on 26-09-2017.
  */
-class ListActivityPres : IListActivityPres,LoaderManager.LoaderCallbacks<MutableList<UserBmi>> {
+class ListActivityPres : IListActivityPres, LoaderManager.LoaderCallbacks<MutableList<UserBmi>> {
 
-    private var mIListActivityView: IListActivityView?=null
+    private var mIListActivityView: IListActivityView? = null
     private lateinit var mContext: Context
     private val dao = MyRoom.myDatabase.userBmiDao()
 
@@ -33,10 +33,10 @@ class ListActivityPres : IListActivityPres,LoaderManager.LoaderCallbacks<Mutable
 
         val loader = loaderManager.getLoader<MutableList<UserBmi>>(1)
 
-        if (loader!=null && loader.isReset){
-            loaderManager.restartLoader(1,null,this).forceLoad()
-        }else{
-            loaderManager.initLoader(1,null,this).forceLoad()
+        if (loader != null && loader.isReset) {
+            loaderManager.restartLoader(1, null, this).forceLoad()
+        } else {
+            loaderManager.initLoader(1, null, this).forceLoad()
         }
 
     }
@@ -45,7 +45,7 @@ class ListActivityPres : IListActivityPres,LoaderManager.LoaderCallbacks<Mutable
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<MutableList<UserBmi>> {
-        return object : AsyncTaskLoader<MutableList<UserBmi>>(mContext){
+        return object : AsyncTaskLoader<MutableList<UserBmi>>(mContext) {
 
             override fun loadInBackground(): MutableList<UserBmi> {
                 return dao.getAll()
@@ -61,7 +61,7 @@ class ListActivityPres : IListActivityPres,LoaderManager.LoaderCallbacks<Mutable
     }
 
     override fun deleteBmiData(userBmi: UserBmi) {
-       val result:Int = dao.deleteUserBmiData(userBmi)
+        val result: Int = dao.deleteUserBmiData(userBmi)
         if (result == 0)
             throw IllegalAccessException("Invalid data to delete")
     }

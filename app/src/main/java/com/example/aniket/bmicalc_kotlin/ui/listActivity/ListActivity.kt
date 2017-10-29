@@ -21,17 +21,17 @@ class ListActivity : AppCompatActivity(),
         BmiAdapter.BmiAdapterOnClickHandler,
         IListActivityView {
 
-    private lateinit var recyclerView:RecyclerView
+    private lateinit var recyclerView: RecyclerView
 
-    lateinit var mUserBmiList:MutableList<UserBmi>
+    lateinit var mUserBmiList: MutableList<UserBmi>
 
-    lateinit var bmiAdapter:BmiAdapter
+    lateinit var bmiAdapter: BmiAdapter
 
-    lateinit var tempUserBmi:UserBmi
+    lateinit var tempUserBmi: UserBmi
 
     private lateinit var emptyViewText: TextView
 
-    private lateinit var listActivityPres:ListActivityPres
+    private lateinit var listActivityPres: ListActivityPres
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -40,12 +40,12 @@ class ListActivity : AppCompatActivity(),
 
         val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
 
-        fab.setOnClickListener { _ -> startActivity(Intent(this,InsertEditActivity::class.java)) }
+        fab.setOnClickListener { _ -> startActivity(Intent(this, InsertEditActivity::class.java)) }
 
         listActivityPres = ListActivityPres()
         listActivityPres.attachView(this)
 
-        val snackbarCallback = object: Snackbar.Callback(){
+        val snackbarCallback = object : Snackbar.Callback() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 listActivityPres.deleteBmiData(tempUserBmi)
                 bmiAdapter.notifyDataSetChanged()
@@ -55,7 +55,7 @@ class ListActivity : AppCompatActivity(),
             override fun onShown(sb: Snackbar?) {}
         }
 
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView?,
                                 viewHolder: RecyclerView.ViewHolder?,
                                 target: RecyclerView.ViewHolder?): Boolean {
@@ -68,11 +68,11 @@ class ListActivity : AppCompatActivity(),
                 mUserBmiList.removeAt(position)
                 bmiAdapter.notifyDataSetChanged()
                 checkDataList()
-                val snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout),"Deleted 1",Snackbar.LENGTH_LONG)
+                val snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), "Deleted 1", Snackbar.LENGTH_LONG)
                 snackbar.setActionTextColor(Color.YELLOW)
                 snackbar.addCallback(snackbarCallback)
                 snackbar.setAction("Undo") {
-                    mUserBmiList.add(position,tempUserBmi)
+                    mUserBmiList.add(position, tempUserBmi)
                     bmiAdapter.notifyDataSetChanged()
                     snackbar.removeCallback(snackbarCallback)
                     checkDataList()
@@ -82,7 +82,7 @@ class ListActivity : AppCompatActivity(),
         }).attachToRecyclerView(recyclerView)
 
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 if ((dy > 0) and fab.isShown)
                     fab.hide()
@@ -100,12 +100,12 @@ class ListActivity : AppCompatActivity(),
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.setHasFixedSize(true)
-        val layoutManager =  LinearLayoutManager(this,
+        val layoutManager = LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL,
                 false)
         recyclerView.layoutManager = layoutManager
 
-        bmiAdapter = BmiAdapter(this,this)
+        bmiAdapter = BmiAdapter(this, this)
 
         recyclerView.adapter = bmiAdapter
 
@@ -123,7 +123,6 @@ class ListActivity : AppCompatActivity(),
     }
 
 
-
     override fun onResume() {
         super.onResume()
         listActivityPres.getUpdateList()
@@ -135,12 +134,12 @@ class ListActivity : AppCompatActivity(),
     }
 
     override fun onClick(id: Int) {
-        val intent = Intent(this,InsertEditActivity::class.java)
-        intent.putExtra(Common.LIST_TO_EDIT_ACTIVITY_INTENT_ID,id)
+        val intent = Intent(this, InsertEditActivity::class.java)
+        intent.putExtra(Common.LIST_TO_EDIT_ACTIVITY_INTENT_ID, id)
         startActivity(intent)
     }
 
-    fun checkDataList(){
+    fun checkDataList() {
         if (mUserBmiList.size == 0)
             emptyViewText.visibility = View.VISIBLE
         else
