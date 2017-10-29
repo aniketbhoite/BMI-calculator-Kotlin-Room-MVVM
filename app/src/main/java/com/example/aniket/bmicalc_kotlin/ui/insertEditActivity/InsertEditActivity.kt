@@ -2,6 +2,7 @@ package com.example.aniket.bmicalc_kotlin.ui.insertEditActivity
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -14,7 +15,7 @@ import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
 
 
-class InsertEditActivity : AppCompatActivity(),IInsertEditView {
+class InsertEditActivity : AppCompatActivity(), IInsertEditView {
 
     private lateinit var genderSpinner: Spinner
     private lateinit var nameEditText: EditText
@@ -23,29 +24,26 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
     private lateinit var ageEditText: EditText
     private lateinit var insertUpdateBtn: Button
     private var gender: String = "male"
-    private var actionUpdate:Boolean = false
+    private var actionUpdate: Boolean = false
     private lateinit var insertEditPresenter: InsertEditPresenter
-    private var id:Int = 0
+    private var id: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_insert_edit)
 
         bindAllViews()
-        val title: String
-        val intent = intent
-        if (intent.hasExtra(Common.LIST_TO_EDIT_ACTIVITY_INTENT_ID)) {
+        var title = "Insert new"
+        var intent:Intent? = intent
+        if (intent!=null && intent.hasExtra(Common.LIST_TO_EDIT_ACTIVITY_INTENT_ID)) {
             id = intent.getIntExtra("id", 0)
             actionUpdate = true
-            if (id != 0){
+            if (id != 0) {
                 title = "Edit"
                 insertEditPresenter.fetchBmiData(id)
-            }else
-                title = "Insert new"
-
-            setTitle(title)
+            }
         }
-
+        setTitle(title)
 
 
         insertUpdateBtn.setOnClickListener {
@@ -54,7 +52,7 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
 
         genderSpinner.onItemSelectedListener = object : OnItemSelectedListener {
 
-            override fun onItemSelected(arg0: AdapterView<*>, arg1: View, arg2: Int, arg3: Long) {
+            override fun onItemSelected(arg0: AdapterView<*>, arg1: View?, arg2: Int, arg3: Long) {
                 val selectedItem = genderSpinner.selectedItem.toString()
                 gender = selectedItem
             }
@@ -66,7 +64,7 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
 
     }
 
-    private fun bindAllViews(){
+    private fun bindAllViews() {
         genderSpinner = findViewById(R.id.spinner)
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
                 R.array.gender_array,
@@ -86,16 +84,16 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
 
     override fun getContext(): Context = baseContext
 
-    private fun addBmiData(){
+    private fun addBmiData() {
         val nameText = nameEditText.text.toString()
-        val heightText= heightEditText.text.toString()
+        val heightText = heightEditText.text.toString()
         val weightText = weightEditText.text.toString()
         val ageText = ageEditText.text.toString()
-        if (TextUtils.isEmpty(nameText) or TextUtils.isEmpty(heightText) or TextUtils.isEmpty(weightText) or TextUtils.isEmpty(ageText)){
-             AlertDialog.Builder(this)
-                     .setMessage("Please fill all fileds")
-                     .setPositiveButton("ok",(DialogInterface.OnClickListener { _, _ -> }))
-                     .show()
+        if (TextUtils.isEmpty(nameText) or TextUtils.isEmpty(heightText) or TextUtils.isEmpty(weightText) or TextUtils.isEmpty(ageText)) {
+            AlertDialog.Builder(this)
+                    .setMessage("Please fill all fileds")
+                    .setPositiveButton("ok", (DialogInterface.OnClickListener { _, _ -> }))
+                    .show()
             return
         }
 
@@ -104,7 +102,7 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
                 nameEditText.text.toString(),
                 heightText,
                 weightText,
-                insertEditPresenter.calculateBmi(heightText,weightText),
+                insertEditPresenter.calculateBmi(heightText, weightText),
                 gender,
                 ageEditText.text.toString().toInt())
         if (!actionUpdate)
@@ -113,7 +111,7 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
             userBmi.id = id
             insertEditPresenter.updateBmiData(userBmi)
         }
-     }
+    }
 
 
     /**
@@ -121,7 +119,7 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
      * Shows data submitted toast and destroys this activity
      */
     override fun dataSubmitted() {
-        Toast.makeText(this,"Data saved successfully",Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Data saved successfully", Toast.LENGTH_LONG).show()
         finish()
     }
 
@@ -133,15 +131,15 @@ class InsertEditActivity : AppCompatActivity(),IInsertEditView {
         ageEditText.setText(userBmi.age.toString())
 
         if (userBmi.gender == "Male")
-            genderSpinner.setSelection(0,true)
+            genderSpinner.setSelection(0, true)
         else if (userBmi.gender == "Female")
-            genderSpinner.setSelection(1,true)
+            genderSpinner.setSelection(1, true)
 
         insertUpdateBtn.text = getString(R.string.update_btn_text)
     }
 
 
     override fun dataSubmitFailed() {
-        Toast.makeText(this,getString(R.string.error_toast_msg),Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.error_toast_msg), Toast.LENGTH_LONG).show()
     }
 }

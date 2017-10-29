@@ -8,13 +8,13 @@ import android.os.Parcelable
  */
 
 
-data class UserBmiDataModel( var id: Int? = null,
+data class UserBmiDataModel(var id: Int? = null,
                             var name: String = "",
                             var height: String = "",
                             var weight: String = "",
                             var bmi: String = "",
                             var gender: String = "",
-                            var age: Int = 0) : Parcelable{
+                            var age: Int = 0) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readString(),
@@ -24,7 +24,7 @@ data class UserBmiDataModel( var id: Int? = null,
             parcel.readString(),
             parcel.readInt())
 
-    constructor():this(null,"","","","","",0)
+    constructor() : this(null, "", "", "", "", "", 0)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.run {

@@ -15,46 +15,46 @@ import com.example.aniket.bmicalc_kotlin.data.UserBmi
 /**
  * Created by aniket on 21-09-2017.
  */
-class BmiAdapter( private var mContext: Context, val clickHandler: BmiAdapterOnClickHandler) : RecyclerView.Adapter<BmiAdapter.ViewHolder>() {
+class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnClickHandler) : RecyclerView.Adapter<BmiAdapter.ViewHolder>() {
 
-    private var mUserBmiList: MutableList<UserBmi>?=null
+    private var mUserBmiList: MutableList<UserBmi>? = null
 
-    interface BmiAdapterOnClickHandler{
+    interface BmiAdapterOnClickHandler {
         fun onClick(id: Int)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.apply {
             name.text = mUserBmiList!![position].name
-            height.text = String.format(mContext.getString(R.string.list_age_text),mUserBmiList!![position].height)
-            bmi.text = String.format("%.1f",mUserBmiList!![position].bmi.toFloat())
-            weight.text = String.format(mContext.getString(R.string.list_gender_text)   ,mUserBmiList!![position].weight)
+            height.text = String.format(mContext.getString(R.string.list_age_text), mUserBmiList!![position].height)
+            bmi.text = String.format("%.1f", mUserBmiList!![position].bmi.toFloat())
+            weight.text = String.format(mContext.getString(R.string.list_gender_text), mUserBmiList!![position].weight)
             itemView.tag = position
         }
         val bmiCircle = (holder!!.bmi.background) as GradientDrawable
         val bmiColor = getBmiColor(mUserBmiList!![position].bmi.toFloat())
-        bmiCircle.setColor(ContextCompat.getColor(mContext,bmiColor))
+        bmiCircle.setColor(ContextCompat.getColor(mContext, bmiColor))
     }
 
     private fun getBmiColor(bmi: Float): Int {
 
-        return when (bmi){
+        return when (bmi) {
 
             in 1f..15f -> R.color.severe_thinness
 
             in 15.1f..16f -> R.color.moderate_thinness
 
-            in 17f..18.5f-> R.color.mild_thinness
+            in 17f..18.5f -> R.color.mild_thinness
 
-            in 18.5f..25f-> R.color.normal
+            in 18.5f..25f -> R.color.normal
 
-            in 25.1f..30f-> R.color.overweight
+            in 25.1f..30f -> R.color.overweight
 
-            in 30f..35f-> R.color.Obese_class_1
+            in 30f..35f -> R.color.Obese_class_1
 
-            in 35.1f..40f-> R.color.Obese_class_2
+            in 35.1f..40f -> R.color.Obese_class_2
 
-            in 40.1f..40f-> R.color.Obese_class_3
+            in 40.1f..40f -> R.color.Obese_class_3
 
             else -> R.color.colorAccent
         }
@@ -62,7 +62,7 @@ class BmiAdapter( private var mContext: Context, val clickHandler: BmiAdapterOnC
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(mContext)
-        return ViewHolder(layoutInflater.inflate(R.layout.list_item,parent,false))
+        return ViewHolder(layoutInflater.inflate(R.layout.list_item, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -73,12 +73,12 @@ class BmiAdapter( private var mContext: Context, val clickHandler: BmiAdapterOnC
     }
 
 
-    fun swapList(userBmiList: MutableList<UserBmi>){
+    fun swapList(userBmiList: MutableList<UserBmi>) {
         mUserBmiList = userBmiList
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),View.OnClickListener{
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         override fun onClick(p0: View?) {
             clickHandler.onClick(mUserBmiList!![adapterPosition].id!!)
         }

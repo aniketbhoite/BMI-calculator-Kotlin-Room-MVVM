@@ -6,9 +6,9 @@ import android.arch.persistence.room.*
  * Created by aniket on 17-09-2017.
  */
 @Dao
-interface UserBmiDao{
+interface UserBmiDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUserBmiData(userBmi: UserBmi):Long
+    fun insertUserBmiData(userBmi: UserBmi): Long
 
     @Query("SELECT * FROM UserBmi")
     fun getAll(): MutableList<UserBmi>
@@ -20,7 +20,7 @@ interface UserBmiDao{
     fun getBmiUserData(id: Int): UserBmi
 
     @Update
-    fun updateUserBmiData(userBmi: UserBmi):Int
+    fun updateUserBmiData(userBmi: UserBmi): Int
 
     @Delete
     fun deleteUserBmiData(userBmi: UserBmi): Int
