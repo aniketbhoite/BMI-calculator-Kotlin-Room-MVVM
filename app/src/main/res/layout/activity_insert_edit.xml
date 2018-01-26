@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.aniket.bmicalc_kotlin.ui.insertEditActivity.InsertEditActivity">
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,7 +13,6 @@
         tools:layout_editor_absoluteY="81dp"
         android:focusable="true"
         android:focusableInTouchMode="true">
-
 
 
         <android.support.design.widget.TextInputLayout

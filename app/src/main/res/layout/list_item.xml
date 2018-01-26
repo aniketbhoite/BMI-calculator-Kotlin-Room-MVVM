@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:foreground="?attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
-    android:layout_marginTop="1dp"
-    app:cardElevation="2dp">
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="0dp"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        tools:layout_editor_absoluteY="81dp">
+        android:minHeight="?android:attr/listPreferredItemHeight">
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"

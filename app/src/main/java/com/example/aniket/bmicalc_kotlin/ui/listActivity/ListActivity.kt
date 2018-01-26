@@ -5,17 +5,21 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
+import android.widget.AbsListView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.aniket.mutativefloatingactionbutton.MutativeFab
 import com.example.aniket.bmicalc_kotlin.Common
 import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
 import com.example.aniket.bmicalc_kotlin.ui.insertEditActivity.InsertEditActivity
+
 
 class ListActivity : AppCompatActivity(),
         BmiAdapter.BmiAdapterOnClickHandler,
@@ -31,6 +35,8 @@ class ListActivity : AppCompatActivity(),
 
     private lateinit var emptyViewText: TextView
 
+    lateinit var mFab: MutativeFab
+
     private lateinit var listActivityPres: ListActivityPres
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,10 @@ class ListActivity : AppCompatActivity(),
         bindAllView()
 
         val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        mFab = findViewById(R.id.mfab)
+        mFab.setFabBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
+
+        mFab.setOnClickListener { startActivity(Intent(this, InsertEditActivity::class.java)) }
 
         fab.setOnClickListener { _ -> startActivity(Intent(this, InsertEditActivity::class.java)) }
 
@@ -82,7 +92,7 @@ class ListActivity : AppCompatActivity(),
         }).attachToRecyclerView(recyclerView)
 
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+/*        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 if ((dy > 0) and fab.isShown)
                     fab.hide()
@@ -92,7 +102,7 @@ class ListActivity : AppCompatActivity(),
                 if (newState == RecyclerView.SCROLL_STATE_IDLE)
                     fab.show()
             }
-        })
+        })*/
 
     }
 
@@ -108,6 +118,28 @@ class ListActivity : AppCompatActivity(),
         bmiAdapter = BmiAdapter(this, this)
 
         recyclerView.adapter = bmiAdapter
+
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0)
+                    mFab.setFabTextVisibility(View.GONE)
+                else
+                    mFab.setFabTextVisibility(View.VISIBLE)
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    mFab.setFabTextVisibility(View.GONE)
+                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    mFab.setFabTextVisibility(View.VISIBLE)
+                }
+            }
+        })
+
 
         emptyViewText = findViewById(R.id.emptyDataText)
     }

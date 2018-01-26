@@ -34,8 +34,8 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
 
         bindAllViews()
         var title = "Insert new"
-        var intent:Intent? = intent
-        if (intent!=null && intent.hasExtra(Common.LIST_TO_EDIT_ACTIVITY_INTENT_ID)) {
+        var intent: Intent? = intent
+        if (intent != null && intent.hasExtra(Common.LIST_TO_EDIT_ACTIVITY_INTENT_ID)) {
             id = intent.getIntExtra("id", 0)
             actionUpdate = true
             if (id != 0) {
