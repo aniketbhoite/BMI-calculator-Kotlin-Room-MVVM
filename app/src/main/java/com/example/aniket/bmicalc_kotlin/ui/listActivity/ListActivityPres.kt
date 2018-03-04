@@ -1,5 +1,7 @@
 package com.example.aniket.bmicalc_kotlin.ui.listActivity
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.LoaderManager
@@ -12,7 +14,7 @@ import com.example.aniket.bmicalc_kotlin.room.MyRoom
 /**
  * Created by aniket on 26-09-2017.
  */
-class ListActivityPres : IListActivityPres, LoaderManager.LoaderCallbacks<MutableList<UserBmi>> {
+class ListActivityPres : IListActivityPres, LoaderManager.LoaderCallbacks<LiveData<MutableList<UserBmi>>> {
 
     private var mIListActivityView: IListActivityView? = null
     private lateinit var mContext: Context
@@ -31,7 +33,7 @@ class ListActivityPres : IListActivityPres, LoaderManager.LoaderCallbacks<Mutabl
     override fun getUpdateList() {
         val loaderManager = (mContext as AppCompatActivity).supportLoaderManager
 
-        val loader = loaderManager.getLoader<MutableList<UserBmi>>(1)
+        val loader = loaderManager.getLoader<LiveData<MutableList<UserBmi>>>(1)
 
         if (loader != null && loader.isReset) {
             loaderManager.restartLoader(1, null, this).forceLoad()
@@ -41,13 +43,13 @@ class ListActivityPres : IListActivityPres, LoaderManager.LoaderCallbacks<Mutabl
 
     }
 
-    override fun onLoaderReset(loader: Loader<MutableList<UserBmi>>?) {
+    override fun onLoaderReset(loader: Loader<LiveData<MutableList<UserBmi>>>) {
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<MutableList<UserBmi>> {
-        return object : AsyncTaskLoader<MutableList<UserBmi>>(mContext) {
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<LiveData<MutableList<UserBmi>>> {
+        return object : AsyncTaskLoader<LiveData<MutableList<UserBmi>>>(mContext) {
 
-            override fun loadInBackground(): MutableList<UserBmi> {
+            override fun loadInBackground(): LiveData<MutableList<UserBmi>> {
                 return dao.getAll()
             }
 
@@ -56,9 +58,11 @@ class ListActivityPres : IListActivityPres, LoaderManager.LoaderCallbacks<Mutabl
 
     }
 
-    override fun onLoadFinished(loader: Loader<MutableList<UserBmi>>?, data: MutableList<UserBmi>?) {
+    override fun onLoadFinished(loader: Loader<LiveData<MutableList<UserBmi>>>, data: LiveData<MutableList<UserBmi>>?) {
         mIListActivityView!!.bmiDataFetchedSuccefully(data!!)
     }
+
+
 
     override fun deleteBmiData(userBmi: UserBmi) {
         val result: Int = dao.deleteUserBmiData(userBmi)

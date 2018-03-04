@@ -1,5 +1,8 @@
 package com.example.aniket.bmicalc_kotlin.ui.listActivity
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -103,7 +106,7 @@ class ListActivity : AppCompatActivity(),
                     fab.show()
             }
         })*/
-
+        listActivityPres.getUpdateList()
     }
 
     private fun bindAllView() {
@@ -124,18 +127,18 @@ class ListActivity : AppCompatActivity(),
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0)
-                    mFab.setFabTextVisibility(View.GONE)
+                    mFab.fabTextVisibility = View.GONE
                 else
-                    mFab.setFabTextVisibility(View.VISIBLE)
+                mFab.fabTextVisibility = View.VISIBLE
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    mFab.setFabTextVisibility(View.GONE)
+                    mFab.fabTextVisibility = View.GONE
                 } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    mFab.setFabTextVisibility(View.VISIBLE)
+                    mFab.fabTextVisibility = View.VISIBLE
                 }
             }
         })
@@ -144,21 +147,22 @@ class ListActivity : AppCompatActivity(),
         emptyViewText = findViewById(R.id.emptyDataText)
     }
 
-    override fun bmiDataFetchedSuccefully(userBmiList: MutableList<UserBmi>) {
+    override fun bmiDataFetchedSuccefully(userBmiLiveDataList: LiveData<MutableList<UserBmi>>) {
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.GONE
-        mUserBmiList = userBmiList
-        checkDataList()
-        bmiAdapter.swapList(userBmiList)
+        userBmiLiveDataList.observe(this, Observer {
+            if (it != null) {
+                mUserBmiList = it
+                checkDataList()
+                bmiAdapter.swapList(it)
+            }
+        })
+
 
     }
 
 
-    override fun onResume() {
-        super.onResume()
-        listActivityPres.getUpdateList()
-    }
 
     override fun onDestroy() {
         super.onDestroy()

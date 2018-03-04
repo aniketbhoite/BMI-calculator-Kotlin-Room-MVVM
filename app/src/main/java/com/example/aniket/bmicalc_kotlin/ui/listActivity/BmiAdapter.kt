@@ -11,11 +11,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
+import com.example.aniket.bmicalc_kotlin.ui.listActivity.BmiAdapter.ViewHolder
 
 /**
  * Created by aniket on 21-09-2017.
  */
-class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnClickHandler) : RecyclerView.Adapter<BmiAdapter.ViewHolder>() {
+class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnClickHandler) : RecyclerView.Adapter<ViewHolder>() {
 
     private var mUserBmiList: MutableList<UserBmi>? = null
 
@@ -23,7 +24,7 @@ class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnCl
         fun onClick(id: Int)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder?.apply {
             name.text = mUserBmiList!![position].name
             height.text = String.format(mContext.getString(R.string.list_age_text), mUserBmiList!![position].height)
@@ -60,7 +61,7 @@ class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnCl
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(mContext)
         return ViewHolder(layoutInflater.inflate(R.layout.list_item, parent, false))
     }

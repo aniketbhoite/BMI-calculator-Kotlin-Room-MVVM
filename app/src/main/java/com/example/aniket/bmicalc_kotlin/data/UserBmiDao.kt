@@ -1,5 +1,7 @@
 package com.example.aniket.bmicalc_kotlin.data
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.persistence.room.*
 
 /**
@@ -11,7 +13,7 @@ interface UserBmiDao {
     fun insertUserBmiData(userBmi: UserBmi): Long
 
     @Query("SELECT * FROM UserBmi")
-    fun getAll(): MutableList<UserBmi>
+    fun getAll(): LiveData<MutableList<UserBmi>>
 
     /*Kotlin isn't preserving the names of the arguments properly
      to overcome this no arg0 is used until now
