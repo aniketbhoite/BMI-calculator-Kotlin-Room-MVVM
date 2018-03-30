@@ -81,7 +81,7 @@
             app:layout_constraintTop_toBottomOf="@+id/weightTextInputLayout" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/genderSpinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
 
@@ -116,7 +116,7 @@
             android:ems="10"
             android:inputType="number"
             app:layout_constraintBaseline_toBaselineOf="@+id/ageETLabel"
-            app:layout_constraintEnd_toEndOf="@+id/spinner"
+            app:layout_constraintEnd_toEndOf="@+id/genderSpinner"
             app:layout_constraintStart_toStartOf="@+id/guideline" />
 
         <Button

@@ -13,16 +13,12 @@ import android.widget.AdapterView.OnItemSelectedListener
 import com.example.aniket.bmicalc_kotlin.Common
 import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
+import kotlinx.android.synthetic.main.activity_insert_edit.*
 
 
 class InsertEditActivity : AppCompatActivity(), IInsertEditView {
 
-    private lateinit var genderSpinner: Spinner
-    private lateinit var nameEditText: EditText
-    private lateinit var heightEditText: EditText
-    private lateinit var weightEditText: EditText
-    private lateinit var ageEditText: EditText
-    private lateinit var insertUpdateBtn: Button
+
     private var gender: String = "male"
     private var actionUpdate: Boolean = false
     private lateinit var insertEditPresenter: InsertEditPresenter
@@ -34,7 +30,7 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
 
         bindAllViews()
         var title = "Insert new"
-        var intent: Intent? = intent
+        val intent: Intent? = intent
         if (intent != null && intent.hasExtra(Common.LIST_TO_EDIT_ACTIVITY_INTENT_ID)) {
             id = intent.getIntExtra("id", 0)
             actionUpdate = true
@@ -65,17 +61,16 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
     }
 
     private fun bindAllViews() {
-        genderSpinner = findViewById(R.id.spinner)
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this,
                 R.array.gender_array,
                 android.R.layout.simple_spinner_dropdown_item)
         genderSpinner.adapter = adapter
 
-        nameEditText = findViewById(R.id.nameEditText)
-        heightEditText = findViewById(R.id.heightEditText)
-        weightEditText = findViewById(R.id.weightEditText)
-        ageEditText = findViewById(R.id.ageEditText)
-        insertUpdateBtn = findViewById(R.id.insertUpdateBtn)
+        nameEditText
+        heightEditText
+        weightEditText
+        ageEditText
+        insertUpdateBtn
 
         insertEditPresenter = InsertEditPresenter()
         insertEditPresenter.attachView(this)

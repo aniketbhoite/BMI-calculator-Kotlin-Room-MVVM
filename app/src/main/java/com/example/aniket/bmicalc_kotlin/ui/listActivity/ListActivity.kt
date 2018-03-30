@@ -1,12 +1,10 @@
 package com.example.aniket.bmicalc_kotlin.ui.listActivity
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -15,20 +13,18 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.widget.AbsListView
-import android.widget.ProgressBar
-import android.widget.TextView
-import com.aniket.mutativefloatingactionbutton.MutativeFab
 import com.example.aniket.bmicalc_kotlin.Common
 import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
 import com.example.aniket.bmicalc_kotlin.ui.insertEditActivity.InsertEditActivity
+import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.activity_list.recyclerView
 
 
 class ListActivity : AppCompatActivity(),
         BmiAdapter.BmiAdapterOnClickHandler,
         IListActivityView {
 
-    private lateinit var recyclerView: RecyclerView
 
     lateinit var mUserBmiList: MutableList<UserBmi>
 
@@ -36,9 +32,7 @@ class ListActivity : AppCompatActivity(),
 
     lateinit var tempUserBmi: UserBmi
 
-    private lateinit var emptyViewText: TextView
 
-    lateinit var mFab: MutativeFab
 
     private lateinit var listActivityPres: ListActivityPres
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +41,10 @@ class ListActivity : AppCompatActivity(),
 
         bindAllView()
 
-        val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        mFab = findViewById(R.id.mfab)
         mFab.setFabBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent))
 
         mFab.setOnClickListener { startActivity(Intent(this, InsertEditActivity::class.java)) }
 
-        fab.setOnClickListener { _ -> startActivity(Intent(this, InsertEditActivity::class.java)) }
 
         listActivityPres = ListActivityPres()
         listActivityPres.attachView(this)
@@ -81,7 +72,7 @@ class ListActivity : AppCompatActivity(),
                 mUserBmiList.removeAt(position)
                 bmiAdapter.notifyDataSetChanged()
                 checkDataList()
-                val snackbar = Snackbar.make(findViewById(R.id.coordinatorLayout), "Deleted 1", Snackbar.LENGTH_LONG)
+                val snackbar = Snackbar.make(coordinatorLayout, "Deleted 1", Snackbar.LENGTH_LONG)
                 snackbar.setActionTextColor(Color.YELLOW)
                 snackbar.addCallback(snackbarCallback)
                 snackbar.setAction("Undo") {
@@ -111,7 +102,6 @@ class ListActivity : AppCompatActivity(),
 
     private fun bindAllView() {
 
-        recyclerView = findViewById(R.id.recyclerView)
         recyclerView.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL,
@@ -129,7 +119,7 @@ class ListActivity : AppCompatActivity(),
                 if (dy > 0)
                     mFab.fabTextVisibility = View.GONE
                 else
-                mFab.fabTextVisibility = View.VISIBLE
+                    mFab.fabTextVisibility = View.VISIBLE
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
@@ -144,12 +134,10 @@ class ListActivity : AppCompatActivity(),
         })
 
 
-        emptyViewText = findViewById(R.id.emptyDataText)
     }
 
     override fun bmiDataFetchedSuccefully(userBmiLiveDataList: LiveData<MutableList<UserBmi>>) {
 
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.GONE
         userBmiLiveDataList.observe(this, Observer {
             if (it != null) {
@@ -161,7 +149,6 @@ class ListActivity : AppCompatActivity(),
 
 
     }
-
 
 
     override fun onDestroy() {

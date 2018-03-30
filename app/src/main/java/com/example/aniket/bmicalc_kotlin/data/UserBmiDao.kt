@@ -18,7 +18,7 @@ interface UserBmiDao {
     /*Kotlin isn't preserving the names of the arguments properly
      to overcome this no arg0 is used until now
     */
-    @Query("SELECT * FROM UserBmi WHERE id = :arg0")
+    @Query("SELECT * FROM UserBmi WHERE id = :id")
     fun getBmiUserData(id: Int): UserBmi
 
     @Update
