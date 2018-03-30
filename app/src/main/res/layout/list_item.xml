@@ -40,7 +40,7 @@
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="Aniket Sunil Bhoite" />
+            tools:text="@tools:sample/full_names" />
 
         <TextView
             android:id="@+id/heightTextView"

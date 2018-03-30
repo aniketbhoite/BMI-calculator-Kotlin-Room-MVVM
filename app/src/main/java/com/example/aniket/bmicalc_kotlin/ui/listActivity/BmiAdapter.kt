@@ -11,11 +11,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
+import com.example.aniket.bmicalc_kotlin.ui.listActivity.BmiAdapter.ViewHolder
+import kotlinx.android.synthetic.main.list_item.view.*
 
 /**
  * Created by aniket on 21-09-2017.
  */
-class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnClickHandler) : RecyclerView.Adapter<BmiAdapter.ViewHolder>() {
+class BmiAdapter(private var mContext: Context, private val mClickHandler: BmiAdapterOnClickHandler) : RecyclerView.Adapter<ViewHolder>() {
 
     private var mUserBmiList: MutableList<UserBmi>? = null
 
@@ -23,15 +25,18 @@ class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnCl
         fun onClick(id: Int)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.apply {
-            name.text = mUserBmiList!![position].name
-            height.text = String.format(mContext.getString(R.string.list_age_text), mUserBmiList!![position].height)
-            bmi.text = String.format("%.1f", mUserBmiList!![position].bmi.toFloat())
-            weight.text = String.format(mContext.getString(R.string.list_gender_text), mUserBmiList!![position].weight)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.apply {
+            nameTextView.text = mUserBmiList!![position].name
+            heightTextView.text = String.format(mContext.getString(R.string.list_age_text), mUserBmiList!![position].height)
+            bmiTextView.text = String.format("%.1f", mUserBmiList!![position].bmi.toFloat())
+            weightTextView.text = String.format(mContext.getString(R.string.list_gender_text), mUserBmiList!![position].weight)
             itemView.tag = position
+            cardView.setOnClickListener {
+                mClickHandler.onClick(mUserBmiList!![position].id!!)
+            }
         }
-        val bmiCircle = (holder!!.bmi.background) as GradientDrawable
+        val bmiCircle = (holder.bmiTextView.background) as GradientDrawable
         val bmiColor = getBmiColor(mUserBmiList!![position].bmi.toFloat())
         bmiCircle.setColor(ContextCompat.getColor(mContext, bmiColor))
     }
@@ -60,7 +65,7 @@ class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnCl
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(mContext)
         return ViewHolder(layoutInflater.inflate(R.layout.list_item, parent, false))
     }
@@ -78,19 +83,18 @@ class BmiAdapter(private var mContext: Context, val clickHandler: BmiAdapterOnCl
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        override fun onClick(p0: View?) {
-            clickHandler.onClick(mUserBmiList!![adapterPosition].id!!)
-        }
+     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-        var name: TextView = itemView.findViewById(R.id.nameTextView)
-        var height: TextView = itemView.findViewById(R.id.heightTextView)
-        var bmi: TextView = itemView.findViewById(R.id.bmiTextView)
-        var weight: TextView = itemView.findViewById(R.id.weightTextView)
-        private var cardView: CardView = itemView.findViewById(R.id.cardView)
 
-        init {
-            cardView.setOnClickListener(this)
-        }
+
+        var nameTextView: TextView = itemView.nameTextView
+        var heightTextView: TextView = itemView.heightTextView
+        var bmiTextView: TextView = itemView.bmiTextView
+        var weightTextView: TextView = itemView.weightTextView
+        var cardView: CardView = itemView.cardView
+         
+
+
+
     }
 }

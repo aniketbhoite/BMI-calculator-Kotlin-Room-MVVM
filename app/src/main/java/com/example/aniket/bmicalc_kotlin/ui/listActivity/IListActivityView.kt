@@ -1,5 +1,7 @@
 package com.example.aniket.bmicalc_kotlin.ui.listActivity
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
 
@@ -10,5 +12,5 @@ interface IListActivityView {
 
     fun getContext(): Context
 
-    fun bmiDataFetchedSuccefully(userBmiList: MutableList<UserBmi>)
+    fun bmiDataFetchedSuccefully(userBmiList: LiveData<MutableList<UserBmi>>)
 }
