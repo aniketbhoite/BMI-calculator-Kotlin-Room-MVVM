@@ -1,7 +1,7 @@
 package com.example.aniket.bmicalc_kotlin.ui.listActivity
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -18,12 +18,10 @@ import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
 import com.example.aniket.bmicalc_kotlin.ui.insertEditActivity.InsertEditActivity
 import kotlinx.android.synthetic.main.activity_list.*
-import kotlinx.android.synthetic.main.activity_list.recyclerView
 
 
 class ListActivity : AppCompatActivity(),
-        BmiAdapter.BmiAdapterOnClickHandler,
-        IListActivityView {
+        BmiAdapter.BmiAdapterOnClickHandler {
 
 
     lateinit var mUserBmiList: MutableList<UserBmi>
@@ -32,9 +30,9 @@ class ListActivity : AppCompatActivity(),
 
     lateinit var tempUserBmi: UserBmi
 
+    private lateinit var listViewModel: ListViewModel
 
 
-    private lateinit var listActivityPres: ListActivityPres
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -46,12 +44,12 @@ class ListActivity : AppCompatActivity(),
         mFab.setOnClickListener { startActivity(Intent(this, InsertEditActivity::class.java)) }
 
 
-        listActivityPres = ListActivityPres()
-        listActivityPres.attachView(this)
+        listViewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
+
 
         val snackbarCallback = object : Snackbar.Callback() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                listActivityPres.deleteBmiData(tempUserBmi)
+                listViewModel.deleteBmiData(tempUserBmi)
                 bmiAdapter.notifyDataSetChanged()
                 checkDataList()
             }
@@ -97,7 +95,15 @@ class ListActivity : AppCompatActivity(),
                     fab.show()
             }
         })*/
-        listActivityPres.getUpdateList()
+//        listActivityPres.getUpdateList()
+        listViewModel.getUpdateList().observe(this, Observer {
+            if (it != null) {
+                progressBar.visibility = View.GONE
+                mUserBmiList = it
+                checkDataList()
+                bmiAdapter.swapList(it)
+            }
+        })
     }
 
     private fun bindAllView() {
@@ -116,7 +122,7 @@ class ListActivity : AppCompatActivity(),
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0)
+                if (dy > 0 && mUserBmiList.size != 0)
                     mFab.fabTextVisibility = View.GONE
                 else
                     mFab.fabTextVisibility = View.VISIBLE
@@ -125,7 +131,7 @@ class ListActivity : AppCompatActivity(),
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING && mUserBmiList.size != 0) {
                     mFab.fabTextVisibility = View.GONE
                 } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     mFab.fabTextVisibility = View.VISIBLE
@@ -136,25 +142,6 @@ class ListActivity : AppCompatActivity(),
 
     }
 
-    override fun bmiDataFetchedSuccefully(userBmiLiveDataList: LiveData<MutableList<UserBmi>>) {
-
-        progressBar.visibility = View.GONE
-        userBmiLiveDataList.observe(this, Observer {
-            if (it != null) {
-                mUserBmiList = it
-                checkDataList()
-                bmiAdapter.swapList(it)
-            }
-        })
-
-
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        listActivityPres.detachView()
-    }
 
     override fun onClick(id: Int) {
         val intent = Intent(this, InsertEditActivity::class.java)
@@ -169,5 +156,4 @@ class ListActivity : AppCompatActivity(),
             emptyViewText.visibility = View.GONE
     }
 
-    override fun getContext() = this
 }
