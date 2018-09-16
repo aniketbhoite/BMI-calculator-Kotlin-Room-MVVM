@@ -83,8 +83,7 @@ class BmiAdapter(private var mContext: Context, private val mClickHandler: BmiAd
         notifyDataSetChanged()
     }
 
-     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
         var nameTextView: TextView = itemView.nameTextView
@@ -92,8 +91,6 @@ class BmiAdapter(private var mContext: Context, private val mClickHandler: BmiAd
         var bmiTextView: TextView = itemView.bmiTextView
         var weightTextView: TextView = itemView.weightTextView
         var cardView: CardView = itemView.cardView
-         
-
 
 
     }

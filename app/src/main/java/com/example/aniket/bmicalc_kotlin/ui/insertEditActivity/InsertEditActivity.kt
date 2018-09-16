@@ -1,6 +1,6 @@
 package com.example.aniket.bmicalc_kotlin.ui.insertEditActivity
 
-import android.content.Context
+import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -8,21 +8,26 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.example.aniket.bmicalc_kotlin.Common
 import com.example.aniket.bmicalc_kotlin.R
 import com.example.aniket.bmicalc_kotlin.data.UserBmi
 import kotlinx.android.synthetic.main.activity_insert_edit.*
 
 
-class InsertEditActivity : AppCompatActivity(), IInsertEditView {
+class InsertEditActivity : AppCompatActivity() {
 
 
     private var gender: String = "male"
     private var actionUpdate: Boolean = false
-    private lateinit var insertEditPresenter: InsertEditPresenter
     private var id: Int = 0
+
+    private val insertEditViewModel by lazy {
+        ViewModelProviders.of(this).get(InsertEditViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +41,7 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
             actionUpdate = true
             if (id != 0) {
                 title = "Edit"
-                insertEditPresenter.fetchBmiData(id)
+                attachBmiDataToUi(insertEditViewModel.fetchBmiData(id))
             }
         }
         setTitle(title)
@@ -72,12 +77,9 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
         ageEditText
         insertUpdateBtn
 
-        insertEditPresenter = InsertEditPresenter()
-        insertEditPresenter.attachView(this)
 
     }
 
-    override fun getContext(): Context = baseContext
 
     private fun addBmiData() {
         val nameText = nameEditText.text.toString()
@@ -97,14 +99,20 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
                 nameEditText.text.toString(),
                 heightText,
                 weightText,
-                insertEditPresenter.calculateBmi(heightText, weightText),
+                insertEditViewModel.calculateBmi(heightText, weightText),
                 gender,
                 ageEditText.text.toString().toInt())
         if (!actionUpdate)
-            insertEditPresenter.insertBmiData(userBmi)
+            if (insertEditViewModel.insertBmiData(userBmi) > 0)
+                dataSubmitted()
+            else
+                dataSubmitFailed()
         else {
             userBmi.id = id
-            insertEditPresenter.updateBmiData(userBmi)
+            if (insertEditViewModel.updateBmiData(userBmi) > 0)
+                dataSubmitted()
+            else
+                dataSubmitFailed()
         }
     }
 
@@ -113,13 +121,13 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
      * This function called after data is submitted
      * Shows data submitted toast and destroys this activity
      */
-    override fun dataSubmitted() {
+    private fun dataSubmitted() {
         Toast.makeText(this, "Data saved successfully", Toast.LENGTH_LONG).show()
         finish()
     }
 
 
-    override fun attachBmiDataToUi(userBmi: UserBmi) {
+    private fun attachBmiDataToUi(userBmi: UserBmi) {
         nameEditText.setText(userBmi.name)
         heightEditText.setText(userBmi.height)
         weightEditText.setText(userBmi.weight)
@@ -134,7 +142,7 @@ class InsertEditActivity : AppCompatActivity(), IInsertEditView {
     }
 
 
-    override fun dataSubmitFailed() {
+    private fun dataSubmitFailed() {
         Toast.makeText(this, getString(R.string.error_toast_msg), Toast.LENGTH_LONG).show()
     }
 }
